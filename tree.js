@@ -19,12 +19,14 @@ class TreeFacade {
     format(tree, depth = 1) {
         if (!tree || tree.length === 0) return '';
 
-        const lvlSeparator = depth === 1 ? '--' : '|__';
+        const lvlSeparator = depth === 1 ? '-' : '|--';
         const levelIndent = Array(depth).join('    ');
 
         return tree
             .map(elem => {
                 const nameFormatted = `(lvl: ${depth}) "${elem.name}"`;
+                if (!elem.items) return `${levelIndent}|__${nameFormatted}\n`;
+
                 const nodesFormatted = tree.length > 0 ? this.format(elem.items, depth + 1) : '';
 
                 return `${levelIndent}${lvlSeparator}${nameFormatted}\n`.concat(nodesFormatted);
@@ -32,12 +34,12 @@ class TreeFacade {
             .join('');
     }
 
-    generateSymbol() {
-        return String.fromCharCode(Number((Math.random() * 10000).toFixed()));
+    generateSymbols(quantity) {
+        return Array.from({ length: quantity }, () => String.fromCharCode(Number((Math.random() * 10 + 1071).toFixed()))).join('');
     }
 
     generateList(getItems) {
-        return Array.from({ length: this.membersQuantity }, () => ({ name: this.generateSymbol(), items: getItems() }));
+        return Array.from({ length: this.membersQuantity }, () => ({ name: this.generateSymbols(4), items: getItems() }));
     }
 }
 
