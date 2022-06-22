@@ -1,14 +1,16 @@
 class TreeFacade {
-    constructor() {
-        this.membersQuantity = 0;
-    }
+    constructor(depth, membersQuantity = Math.random() > 0.5 ? 2 : 1) {
+        console.log(`Генерация дерева с глубиной: ${depth} и количеством узлов: ${membersQuantity}`);
 
-    generate(depth, membersQuantity) {
+        this.depth = depth;
         this.membersQuantity = membersQuantity;
-        console.log(this.format(this.generateTree(depth)));
     }
 
-    generateTree(depth) {
+    generateAndPrint() {
+        console.log(this.format(this.generateTree()));
+    }
+
+    generateTree(depth = this.depth) {
         return depth === 1
             ? this.generateList(() => {})
             : this.generateList(() => this.generateTree(depth - 1));
@@ -39,21 +41,32 @@ class TreeFacade {
     }
 }
 
-const [_, __, ...rest] = process.argv;
-const paramsAsString = rest.join(' ');
-
 const depthPatternShort = /-d\s*[\d]+/;
 const depthPatternLong = /--depth\s*[\d]+/;
 
+class MainFacade {
+    constructor(TreeFacade) {
+        this.treeFacade = new TreeFacade(this.depth);
+    }
+
+    get depth() {
+        const [_, __, ...rest] = process.argv;
+        this.paramsAsString = rest.join(' ');
+
+        const [depthRaw] = this.paramsAsString.match(depthPatternShort) || this.paramsAsString.match(depthPatternLong) || [];
+
+        return Number(depthRaw.replace(/[^\d]/g, ''));
+    }
+
+    generateAndPrint() {
+        return this.treeFacade.generateAndPrint();
+    }
+}
+
+
+
 try {
-    const [depthRaw] = paramsAsString.match(depthPatternShort) || paramsAsString.match(depthPatternLong) || [];
-    const depth = Number(depthRaw.replace(/[^\d]/g, ''));
-
-    const membersQuantity = Math.random() > 0.5 ? 2 : 1;
-
-    console.log(`Генерация дерева с глубиной: ${depth} и количеством узлов: ${membersQuantity}`);
-
-    new TreeFacade().generate(depth, membersQuantity);
+    new MainFacade(TreeFacade).generateAndPrint();
 } catch (err) {
     console.log('Проверьте корректность ввода: "-d" или "--depth" для глубины вложенности');
 }
