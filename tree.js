@@ -25,9 +25,10 @@ class TreeFacade {
         return tree
             .map(elem => {
                 const nameFormatted = `(lvl: ${depth}) "${elem.name}"`;
+
                 if (!elem.items) return `${levelIndent}|__${nameFormatted}\n`;
 
-                const nodesFormatted = tree.length > 0 ? this.format(elem.items, depth + 1) : '';
+                const nodesFormatted = this.format(elem.items, depth + 1);
 
                 return `${levelIndent}${lvlSeparator}${nameFormatted}\n`.concat(nodesFormatted);
             })
