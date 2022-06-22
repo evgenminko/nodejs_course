@@ -54,7 +54,7 @@ class MainFacade {
 }
 
 try {
-    new MainFacade(TreeFacade).generateAndPrint(); // пункт 1
+    // new MainFacade(TreeFacade).generateAndPrint(); // пункт 1
     // new MainFacade(FilesFacade).generateAndPrint(); // пункт 2
 } catch (err) {
     console.log(err);
