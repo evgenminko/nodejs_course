@@ -6,7 +6,7 @@ const readdirAsync = util.promisify(fs.readdir);
 
 module.exports.FilesFacade = class FilesFacade {
     constructor(depth, wayToDir) {
-        console.log(`Генерация списка директорий и файлов с глубиной: ${depth}`);
+        console.log(`Генерация списка директорий и файлов с глубиной: "${depth}", путь к корневой директории: "${wayToDir}"`);
 
         this.depth = depth;
         this.wayToDir = path.resolve(wayToDir);

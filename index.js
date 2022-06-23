@@ -28,7 +28,6 @@ class MainFacade {
 
     get path() {
         const [pathRaw] = this.paramsAsString.match(pathPatternShort) || this.paramsAsString.match(pathPatternLong);
-        console.log(pathRaw)
 
         return pathRaw.replace(/(--path|-p)\s/, '');
     }
@@ -55,7 +54,7 @@ class MainFacade {
 
 try {
     // new MainFacade(TreeFacade).generateAndPrint(); // пункт 1
-    // new MainFacade(FilesFacade).generateAndPrint(); // пункт 2
+    new MainFacade(FilesFacade).generateAndPrint(); // пункт 2
 } catch (err) {
     console.log(err);
 }
