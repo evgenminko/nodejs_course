@@ -37,8 +37,8 @@ class MainFacade {
         const [_, __, ...rest] = process.argv;
         const paramsAsString = rest.join(' ');
 
-        await new MainFacade(new TreeFacade(paramsAsString)).generateAndPrint(); // пункт 1
-        await new MainFacade(new FilesFacade(paramsAsString)).generateAndPrint(); // пункт 1
+        // await new MainFacade(new TreeFacade(paramsAsString)).generateAndPrint(); // пункт 1
+        // await new MainFacade(new FilesFacade(paramsAsString)).generateAndPrint(); // пункт 1
     } catch (err) {
         console.log(err);
     }
