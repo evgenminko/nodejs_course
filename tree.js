@@ -1,9 +1,12 @@
 module.exports.TreeFacade = class TreeFacade {
-    constructor(depth) {
-        this.membersQuantity = Math.random() > 0.5 ? 2 : 1;
-        this.depth = depth;
+    constructor(paramsAsString) {
+        const [depth] = paramsAsString.match(/(?<=(-d|--depth)\s*)[\d]+/);
+        this.depth = Number(depth);
 
-        console.log(`Генерация дерева с глубиной: ${depth} и количеством узлов: ${this.membersQuantity}`);
+        const [membersQuantity = Math.random() > 0.5 ? 2 : 1] = paramsAsString.match(/(?<=(-m|--members)\s*)[\d]+/) || [];
+        this.membersQuantity = Number(membersQuantity);
+
+        console.log(`Генерация дерева с глубиной: "${depth}" и количеством узлов: "${this.membersQuantity}"\n`);
     }
 
     generate() {

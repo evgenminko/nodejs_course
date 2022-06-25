@@ -1,35 +1,15 @@
 const {FilesFacade} = require("./dir");
 const {TreeFacade} = require("./tree");
-const depthPatternShort = /-d\s*[\d]+/;
-const depthPatternLong = /--depth\s*[\d]+/;
-
-const pathPatternShort = /-p\s[^\s]+/;
-const pathPatternLong = /--path\s[^\s]+/;
 
 class MainFacade {
-    constructor(TreeFacade) {
-        const [_, __, ...rest] = process.argv;
-        this.paramsAsString = rest.join(' ');
-
-        this.treeFacade = new TreeFacade(this.depth, this.path);
+    constructor(treeFacade) {
+        this.treeFacade = treeFacade;
     }
 
     generateAndPrint() {
         return this.treeFacade.generate()
             .then((data) => this.format(data))
-            .then(console.log);
-    }
-
-    get depth() {
-        const [depthRaw] = this.paramsAsString.match(depthPatternShort) || this.paramsAsString.match(depthPatternLong);
-
-        return Number(depthRaw.replace(/[^\d]/g, ''));
-    }
-
-    get path() {
-        const [pathRaw] = this.paramsAsString.match(pathPatternShort) || this.paramsAsString.match(pathPatternLong);
-
-        return pathRaw.replace(/(--path|-p)\s/, '');
+            .then((data) => console.log(data));
     }
 
     format(tree, depth = 1) {
@@ -52,9 +32,14 @@ class MainFacade {
     }
 }
 
-try {
-    // new MainFacade(TreeFacade).generateAndPrint(); // пункт 1
-    new MainFacade(FilesFacade).generateAndPrint(); // пункт 2
-} catch (err) {
-    console.log(err);
-}
+(async () => {
+    try {
+        const [_, __, ...rest] = process.argv;
+        const paramsAsString = rest.join(' ');
+
+        await new MainFacade(new TreeFacade(paramsAsString)).generateAndPrint(); // пункт 1
+        await new MainFacade(new FilesFacade(paramsAsString)).generateAndPrint(); // пункт 1
+    } catch (err) {
+        console.log(err);
+    }
+})()

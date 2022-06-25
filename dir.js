@@ -5,11 +5,14 @@ const util = require('util')
 const readdirAsync = util.promisify(fs.readdir);
 
 module.exports.FilesFacade = class FilesFacade {
-    constructor(depth, wayToDir) {
-        console.log(`Генерация списка директорий и файлов с глубиной: "${depth}", путь к корневой директории: "${wayToDir}"`);
+    constructor(paramsAsString) {
+        const [depth] = paramsAsString.match(/(?<=(-d|--depth)\s*)[\d]+/);
+        this.depth = Number(depth);
 
-        this.depth = depth;
+        const [wayToDir] = paramsAsString.match(/(?<=(-p|--path)\s+)[^\s]+/);
         this.wayToDir = path.resolve(wayToDir);
+
+        console.log(`Генерация списка директорий и файлов с глубиной: "${depth}", путь к корневой директории: "${wayToDir}"\n`);
     }
 
     async generate() {
